@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 @app.route("/")
 def home():
-    return send_from_directory("static", "index.html")
+    return send_from_directory(app.static_folder, "index.html")
 # ----------------------------------------------------
 # 🔶 FILL THIS SECTION WITH YOUR GMAIL & APP PASSWORD
 # ----------------------------------------------------
