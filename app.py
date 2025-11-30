@@ -8,7 +8,11 @@ app = Flask(__name__)
 CORS(app)
 @app.route("/")
 def home():
-    return send_from_directory(app.static_folder, "index.html")
+    return send_from_directory("static", "index.html")
+
+@app.route("/<path:path>")
+def static_files(path):
+    return send_from_directory("static", path)
 # ----------------------------------------------------
 # 🔶 FILL THIS SECTION WITH YOUR GMAIL & APP PASSWORD
 # ----------------------------------------------------
@@ -16,10 +20,10 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 
-app.config['MAIL_USERNAME'] = "hariprasaadmurugesan2004@gmail.com" 
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 # Example: app.config['MAIL_USERNAME'] = "hariprasaadmurugesan2004@gmail.com"
 
-app.config['MAIL_PASSWORD'] = "qglk vnam bsuu dvsq"
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 # Example: app.config['MAIL_PASSWORD'] = 'abcd efgh ijkl mnop'
 # ----------------------------------------------------
 
