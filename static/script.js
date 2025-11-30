@@ -50,3 +50,32 @@ const typed=new Typed('.multiple-text',{
     backDelay:1000,
     loop:true
 })
+function sendMessage(event) {
+    event.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: 
+            "Mobile: " + document.getElementById("mobile").value + "\n" +
+            "Subject: " + document.getElementById("subject").value + "\n\n" +
+            document.getElementById("message").value
+    };
+
+    fetch("http://127.0.0.1:5000/sendmail", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+        alert("Message Sent Successfully!");
+        document.getElementById("contactForm").reset();
+    })
+    .catch(err => {
+        alert("Error sending message!");
+        console.log(err);
+    });
+}
