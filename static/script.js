@@ -62,7 +62,7 @@ function sendMessage(event) {
             document.getElementById("message").value
     };
 
-    fetch("http://127.0.0.1:5000/sendmail", {
+    fetch("/sendmail", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
