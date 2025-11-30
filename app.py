@@ -1,31 +1,28 @@
-from flask import Flask, request, jsonify, send_from_directory
-import os
-from flask import Flask, request, jsonify
+from flask import Flask, send_from_directory, request, jsonify
 from flask_mail import Mail, Message
 from flask_cors import CORS
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 CORS(app)
+
+# Serve index.html
 @app.route("/")
-def home():
+def index():
     return send_from_directory("static", "index.html")
 
-@app.route("/<path:path>")
-def static_files(path):
+# Serve CSS, JS, Images correctly
+@app.route("/static/<path:path>")
+def serve_static(path):
     return send_from_directory("static", path)
-# ----------------------------------------------------
-# 🔶 FILL THIS SECTION WITH YOUR GMAIL & APP PASSWORD
-# ----------------------------------------------------
+
+# ---- EMAIL CONFIG ----
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-# Example: app.config['MAIL_USERNAME'] = "hariprasaadmurugesan2004@gmail.com"
-
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-# Example: app.config['MAIL_PASSWORD'] = 'abcd efgh ijkl mnop'
-# ----------------------------------------------------
 
 app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 
@@ -34,32 +31,35 @@ mail = Mail(app)
 @app.route("/sendmail", methods=["POST"])
 def send_mail():
     data = request.json
-    name = data.get("name")
-    email = data.get("email")
-    message_text = data.get("message")
+
+    name = data["name"]
+    email = data["email"]
+    mobile = data["mobile"]
+    subject = data["subject"]
+    message_text = data["message"]
+
+    body = f"""
+New portfolio message:
+
+Name: {name}
+Email: {email}
+Mobile: {mobile}
+Subject: {subject}
+
+Message:
+{message_text}
+"""
 
     msg = Message(
-        subject=f"New Portfolio Message from {name}",
-
-        # ----------------------------------------------------
-        # 🔶 FILL THIS WITH YOUR GMAIL (THIS IS WHERE MAIL ARRIVES)
-        # ----------------------------------------------------
-        recipients=["hariprasaadmurugesan2004@gmail.com"],  
-        # Example: recipients=["hariprasaad123@gmail.com"],
-        # ----------------------------------------------------
-
-        body=f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_text}"
+        subject=f"Portfolio Message: {subject}",
+        recipients=["hariprasaadmurugesan2004@gmail.com"],
+        body=body,
+        reply_to=email
     )
 
     mail.send(msg)
-    return jsonify({"status": "success", "message": "Mail sent!"}), 200
+    return jsonify({"status": "success"}), 200
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
-
-
-#YOUR_EMAIL = "hariprasaadmurugesan2004@gmail.com"
-#YOUR_PASSWORD = "qglk vnam bsuu dvsq"
+    app.run()
