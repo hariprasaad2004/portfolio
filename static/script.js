@@ -56,10 +56,9 @@ function sendMessage(event) {
     const data = {
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
-        message: 
-            "Mobile: " + document.getElementById("mobile").value + "\n" +
-            "Subject: " + document.getElementById("subject").value + "\n\n" +
-            document.getElementById("message").value
+        mobile: document.getElementById("mobile").value,
+        subject: document.getElementById("subject").value,
+        message: document.getElementById("message").value
     };
 
     fetch("/sendmail", {
@@ -76,6 +75,6 @@ function sendMessage(event) {
     })
     .catch(err => {
         alert("Error sending message!");
-        console.log(err);
+        console.error(err);
     });
 }
