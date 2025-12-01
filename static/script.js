@@ -61,7 +61,7 @@ function sendMessage(event) {
         message: document.getElementById("message").value
     };
 
-    fetch("https://hari-portfolio-jvau.onrender.com/sendmail", {
+    fetch("/sendmail", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
