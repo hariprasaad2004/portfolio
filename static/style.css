@@ -506,3 +506,9 @@ span {
     background-color: #1f242d;
   }
 }
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2.2rem;
+  }
+}
